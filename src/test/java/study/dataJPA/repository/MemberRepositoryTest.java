@@ -68,7 +68,7 @@ class MemberRepositoryTest {
         memberRepository.save(member2);
         List<Member> result = memberRepository.findByUsernameAndAgeGreaterThan("AAA", 15);
         org.assertj.core.api.Assertions.assertThat(result.get(0).getUsername()).isEqualTo("AAA");
-        org.assertj.core.api.Assertions.assertThat(result.get(0).getAge()).isEqualTo(20);
+        org.assertj.core.api.Assertions.assertThat(result.get(0).getAge()).isEqualTo(201);
         org.assertj.core.api.Assertions.assertThat(result.size()).isEqualTo(1);
     }
 
