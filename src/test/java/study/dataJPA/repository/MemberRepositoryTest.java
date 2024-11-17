@@ -4,6 +4,10 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import study.dataJPA.dto.MemberDto;
@@ -159,6 +163,42 @@ class MemberRepositoryTest {
 
         Optional<Member> optionalMember = memberRepository.findOptionalByUsername("AAA");
         System.out.println("optionalMember = " + optionalMember);
+
+
+    }
+    @Test
+    public void paging()
+    {
+        //given
+        Member member1 = new Member("AAA1",10);
+        Member member2 = new Member("BBB2",10);
+        Member member3 = new Member("BBB3",10);
+        Member member4 = new Member("BBB4",10);
+        Member member5 = new Member("BBB5",10);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+        memberRepository.save(member3);
+        memberRepository.save(member4);
+        memberRepository.save(member5);
+        //when
+        int age = 10;
+        PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "username"));
+        Page<Member> page = memberRepository.findByAge(age, pageRequest);
+        //todo DTO로 반환 하는 꿀팁
+        Page<MemberDto> toMap = page.map(member -> new MemberDto(member.getId(), member.getUsername(), member.getTeam().getName()));
+
+//        Slice<Member> page2 = memberRepository.findByAge(age, pageRequest);
+//        List<Member> page3 = memberRepository.findByAge(age, pageRequest);
+
+        //then
+        List<Member> content = page.getContent();
+        long totalCount = page.getTotalElements();
+        Assertions.assertThat(content.size()).isEqualTo(3);
+        Assertions.assertThat(totalCount).isEqualTo(5);
+        Assertions.assertThat(page.getTotalPages()).isEqualTo(2);
+        Assertions.assertThat(page.isFirst()).isTrue();
+        Assertions.assertThat(page.hasNext()).isTrue();
+
 
 
     }
