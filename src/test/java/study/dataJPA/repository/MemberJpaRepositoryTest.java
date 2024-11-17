@@ -1,5 +1,6 @@
 package study.dataJPA.repository;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -38,5 +39,18 @@ class MemberJpaRepositoryTest {
         org.assertj.core.api.Assertions.assertThat(result.get(0).getUsername()).isEqualTo("AAA");
         org.assertj.core.api.Assertions.assertThat(result.get(0).getAge()).isEqualTo(20);
         org.assertj.core.api.Assertions.assertThat(result.size()).isEqualTo(1);
+    }
+    @Test
+    public void testNamedQuery()
+    {
+        Member member1 = new Member("AAA",10);
+        Member member2 = new Member("BBB",20);
+        memberJpaRepository.save(member1);
+        memberJpaRepository.save(member2);
+
+        List<Member> result = memberJpaRepository.findByUsername("AAA");
+        Member findMember = result.get(0);
+        Assertions.assertThat(findMember).isEqualTo(member1);
+
     }
 }
