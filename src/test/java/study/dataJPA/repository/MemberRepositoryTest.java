@@ -202,4 +202,24 @@ class MemberRepositoryTest {
 
 
     }
+    @Test
+    public void bulkUpdate()
+    {
+        //given
+        Member member1 = new Member("AAA1",10);
+        Member member2 = new Member("BBB2",19);
+        Member member3 = new Member("BBB3",20);
+        Member member4 = new Member("BBB4",21);
+        Member member5 = new Member("BBB5",40);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+        memberRepository.save(member3);
+        memberRepository.save(member4);
+        memberRepository.save(member5);
+        //DB에 대한 직접 쿼리 실행으로 영속성 컨텍스트는 초기화 해줘야함
+        int resultCount = memberRepository.bulkAgePlus(20);
+        Member m5 = memberRepository.findMemberByUsername("BBB5");
+        System.out.println("m5 = " + m5);
+        Assertions.assertThat(resultCount).isEqualTo(3);
+    }
 }
