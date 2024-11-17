@@ -12,6 +12,7 @@ import study.dataJPA.entity.Team;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -144,5 +145,21 @@ class MemberRepositoryTest {
         }
 
     }
+    @Test
+    public void returnType()
+    {
+        Member member1 = new Member("AAA",10);
+        Member member2 = new Member("BBB",20);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
 
+//        List<Member> aaa = memberRepository.findListByUsername("AAA123");
+        // List 결과는 null이 나올수 없음 EmptyCollection 반환
+//        Member findMember = memberRepository.findMemberByUsername("AAA1235");
+
+        Optional<Member> optionalMember = memberRepository.findOptionalByUsername("AAA");
+        System.out.println("optionalMember = " + optionalMember);
+
+
+    }
 }
