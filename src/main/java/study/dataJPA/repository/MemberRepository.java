@@ -14,4 +14,6 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
 //    @Query(name = "Member.findByUsername")
     // 쿼리이름으로 @Query 와 매칭이 안되면 쿼리이름으로 쿼리문 재생성
     List<Member> findByUsername(@Param("username")String username);
+    @Query("select m from Member m where m.username = :username and m.age = :age")
+    List<Member> findMember(@Param("username")String username, @Param("age") int age);
 }
