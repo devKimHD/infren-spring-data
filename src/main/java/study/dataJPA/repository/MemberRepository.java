@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 // ctrl p 파라미터 보기
-public interface MemberRepository extends JpaRepository<Member,Long> {
+public interface MemberRepository extends JpaRepository<Member,Long>, MemberRepositoryCustom {
     List<Member> findByUsernameAndAgeGreaterThan(String username, int age);
 
 //    @Query(name = "Member.findByUsername")
