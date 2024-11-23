@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import study.dataJPA.repository.MemberJpaRepository;
+import study.dataJPA.repository.MemberRepository;
 
 import java.util.List;
 
@@ -22,6 +23,8 @@ class MemberTest {
     EntityManager em;
     @Autowired
     MemberJpaRepository memberJpaRepository;
+    @Autowired
+    MemberRepository memberRepository;
     @Test
     public void testEntity()
     {
@@ -78,5 +81,25 @@ class MemberTest {
         memberJpaRepository.delete(member2);
         long countDel = memberJpaRepository.count();
         Assertions.assertThat(countDel).isEqualTo(0);
+    }
+
+    @Test
+    public void jpaEventBestEntity() throws Exception
+    {
+        //given
+        Member member = new Member("member1");
+        memberRepository.save(member);
+
+        Thread.sleep(100);
+        member.setUsername("member2");
+        em.flush();
+        em.clear();
+        //when
+        Member member1 = memberRepository.findById(member.getId()).get();
+        //then
+        System.out.println("member1.getCreatedDate() = " + member1.getCreatedDate());
+        System.out.println("member1.getUpdatedDate() = " + member1.getLastModifiedDate());
+        System.out.println("member1.getCreatedBy() = " + member1.getCreatedBy());
+        System.out.println("member1.getLastModifiedBy() = " + member1.getLastModifiedBy());
     }
 }
